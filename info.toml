@@ -908,176 +908,176 @@ The fold method can be useful in the count_collection_iterator function.
 For a further challenge, consult the documentation for Iterator to find
 a different method that could make your code more compact than using fold."""
 
-# THREADS
-
-[[exercises]]
-name = "threads1"
-path = "exercises/threads/threads1.rs"
-mode = "compile"
-hint = """
-`JoinHandle` is a struct that is returned from a spawned thread:
-https://doc.rust-lang.org/std/thread/fn.spawn.html
-
-A challenge with multi-threaded applications is that the main thread can
-finish before the spawned threads are completed.
-https://doc.rust-lang.org/book/ch16-01-threads.html#waiting-for-all-threads-to-finish-using-join-handles
-
-Use the JoinHandles to wait for each thread to finish and collect their results.
-https://doc.rust-lang.org/std/thread/struct.JoinHandle.html
-"""
-
-[[exercises]]
-name = "threads2"
-path = "exercises/threads/threads2.rs"
-mode = "compile"
-hint = """
-`Arc` is an Atomic Reference Counted pointer that allows safe, shared access
-to **immutable** data. But we want to *change* the number of `jobs_completed`
-so we'll need to also use another type that will only allow one thread to
-mutate the data at a time. Take a look at this section of the book:
-https://doc.rust-lang.org/book/ch16-03-shared-state.html#atomic-reference-counting-with-arct
-and keep reading if you'd like more hints :)
-
-
-Do you now have an `Arc` `Mutex` `JobStatus` at the beginning of main? Like:
-`let status = Arc::new(Mutex::new(JobStatus { jobs_completed: 0 }));`
-Similar to the code in the example in the book that happens after the text
-that says "We can use Arc<T> to fix this.". If not, give that a try! If you
-do and would like more hints, keep reading!!
-
-
-Make sure neither of your threads are holding onto the lock of the mutex
-while they are sleeping, since this will prevent the other thread from
-being allowed to get the lock. Locks are automatically released when
-they go out of scope.
-
-If you've learned from the sample solutions, I encourage you to come
-back to this exercise and try it again in a few days to reinforce
-what you've learned :)"""
-
-[[exercises]]
-name = "threads3"
-path = "exercises/threads/threads3.rs"
-mode = "compile"
-hint = """
-An alternate way to handle concurrency between threads is to use
-a mpsc (multiple producer, single consumer) channel to communicate.
-With both a sending end and a receiving end, it's possible to
-send values in one thread and receive them in another.
-Multiple producers are possible by using clone() to create a duplicate
-of the original sending end.
-See https://doc.rust-lang.org/book/ch16-02-message-passing.html for more info.
-"""
-
-# SMART POINTERS
-
-[[exercises]]
-name = "box1"
-path = "exercises/smart_pointers/box1.rs"
-mode = "test"
-hint = """
-Step 1
-The compiler's message should help: since we cannot store the value of the actual type
-when working with recursive types, we need to store a reference (pointer) to its value.
-We should, therefore, place our `List` inside a `Box`. More details in the book here:
-https://doc.rust-lang.org/book/ch15-01-box.html#enabling-recursive-types-with-boxes
-
-Step 2
-Creating an empty list should be fairly straightforward (hint: peek at the assertions).
-For a non-empty list keep in mind that we want to use our Cons "list builder".
-Although the current list is one of integers (i32), feel free to change the definition
-and try other types!
-"""
-
-[[exercises]]
-name = "rc1"
-path = "exercises/smart_pointers/rc1.rs"
-mode = "compile"
-hint = """
-This is a straightforward exercise to use the Rc<T> type. Each Planet has
-ownership of the Sun, and uses Rc::clone() to increment the reference count of the Sun.
-After using drop() to move the Planets out of scope individually, the reference count goes down.
-In the end the sun only has one reference again, to itself. See more at:
-https://doc.rust-lang.org/book/ch15-04-rc.html
-
-* Unfortunately Pluto is no longer considered a planet :(
-"""
-
-[[exercises]]
-name = "arc1"
-path = "exercises/smart_pointers/arc1.rs"
-mode = "compile"
-hint = """
-Make `shared_numbers` be an `Arc` from the numbers vector. Then, in order
-to avoid creating a copy of `numbers`, you'll need to create `child_numbers`
-inside the loop but still in the main thread.
-
-`child_numbers` should be a clone of the Arc of the numbers instead of a
-thread-local copy of the numbers.
-
-This is a simple exercise if you understand the underlying concepts, but if this
-is too much of a struggle, consider reading through all of Chapter 16 in the book:
-https://doc.rust-lang.org/stable/book/ch16-00-concurrency.html
-"""
-
-[[exercises]]
-name = "cow1"
-path = "exercises/smart_pointers/cow1.rs"
-mode = "test"
-hint = """
-If Cow already owns the data it doesn't need to clone it when to_mut() is called.
-
-Check out https://doc.rust-lang.org/std/borrow/enum.Cow.html for documentation
-on the `Cow` type.
-"""
-
-# MACROS
-
-[[exercises]]
-name = "macros1"
-path = "exercises/macros/macros1.rs"
-mode = "compile"
-hint = """
-When you call a macro, you need to add something special compared to a
-regular function call. If you're stuck, take a look at what's inside
-`my_macro`."""
-
-[[exercises]]
-name = "macros2"
-path = "exercises/macros/macros2.rs"
-mode = "compile"
-hint = """
-Macros don't quite play by the same rules as the rest of Rust, in terms of
-what's available where.
-
-Unlike other things in Rust, the order of "where you define a macro" versus
-"where you use it" actually matters."""
-
-[[exercises]]
-name = "macros3"
-path = "exercises/macros/macros3.rs"
-mode = "compile"
-hint = """
-In order to use a macro outside of its module, you need to do something
-special to the module to lift the macro out into its parent.
-
-The same trick also works on "extern crate" statements for crates that have
-exported macros, if you've seen any of those around."""
-
-[[exercises]]
-name = "macros4"
-path = "exercises/macros/macros4.rs"
-mode = "compile"
-hint = """
-You only need to add a single character to make this compile.
-The way macros are written, it wants to see something between each
-"macro arm", so it can separate them.
-
-That's all the macro exercises we have in here, but it's barely even
-scratching the surface of what you can do with Rust's macros. For a more
-thorough introduction, you can have a read through the little book of Rust
-macros: https://veykril.github.io/tlborm/"""
-
+# # THREADS
+#
+# [[exercises]]
+# name = "threads1"
+# path = "exercises/threads/threads1.rs"
+# mode = "compile"
+# hint = """
+# `JoinHandle` is a struct that is returned from a spawned thread:
+# https://doc.rust-lang.org/std/thread/fn.spawn.html
+#
+# A challenge with multi-threaded applications is that the main thread can
+# finish before the spawned threads are completed.
+# https://doc.rust-lang.org/book/ch16-01-threads.html#waiting-for-all-threads-to-finish-using-join-handles
+#
+# Use the JoinHandles to wait for each thread to finish and collect their results.
+# https://doc.rust-lang.org/std/thread/struct.JoinHandle.html
+# """
+#
+# [[exercises]]
+# name = "threads2"
+# path = "exercises/threads/threads2.rs"
+# mode = "compile"
+# hint = """
+# `Arc` is an Atomic Reference Counted pointer that allows safe, shared access
+# to **immutable** data. But we want to *change* the number of `jobs_completed`
+# so we'll need to also use another type that will only allow one thread to
+# mutate the data at a time. Take a look at this section of the book:
+# https://doc.rust-lang.org/book/ch16-03-shared-state.html#atomic-reference-counting-with-arct
+# and keep reading if you'd like more hints :)
+#
+#
+# Do you now have an `Arc` `Mutex` `JobStatus` at the beginning of main? Like:
+# `let status = Arc::new(Mutex::new(JobStatus { jobs_completed: 0 }));`
+# Similar to the code in the example in the book that happens after the text
+# that says "We can use Arc<T> to fix this.". If not, give that a try! If you
+# do and would like more hints, keep reading!!
+#
+#
+# Make sure neither of your threads are holding onto the lock of the mutex
+# while they are sleeping, since this will prevent the other thread from
+# being allowed to get the lock. Locks are automatically released when
+# they go out of scope.
+#
+# If you've learned from the sample solutions, I encourage you to come
+# back to this exercise and try it again in a few days to reinforce
+# what you've learned :)"""
+#
+# [[exercises]]
+# name = "threads3"
+# path = "exercises/threads/threads3.rs"
+# mode = "compile"
+# hint = """
+# An alternate way to handle concurrency between threads is to use
+# a mpsc (multiple producer, single consumer) channel to communicate.
+# With both a sending end and a receiving end, it's possible to
+# send values in one thread and receive them in another.
+# Multiple producers are possible by using clone() to create a duplicate
+# of the original sending end.
+# See https://doc.rust-lang.org/book/ch16-02-message-passing.html for more info.
+# """
+#
+# # SMART POINTERS
+#
+# [[exercises]]
+# name = "box1"
+# path = "exercises/smart_pointers/box1.rs"
+# mode = "test"
+# hint = """
+# Step 1
+# The compiler's message should help: since we cannot store the value of the actual type
+# when working with recursive types, we need to store a reference (pointer) to its value.
+# We should, therefore, place our `List` inside a `Box`. More details in the book here:
+# https://doc.rust-lang.org/book/ch15-01-box.html#enabling-recursive-types-with-boxes
+#
+# Step 2
+# Creating an empty list should be fairly straightforward (hint: peek at the assertions).
+# For a non-empty list keep in mind that we want to use our Cons "list builder".
+# Although the current list is one of integers (i32), feel free to change the definition
+# and try other types!
+# """
+#
+# [[exercises]]
+# name = "rc1"
+# path = "exercises/smart_pointers/rc1.rs"
+# mode = "compile"
+# hint = """
+# This is a straightforward exercise to use the Rc<T> type. Each Planet has
+# ownership of the Sun, and uses Rc::clone() to increment the reference count of the Sun.
+# After using drop() to move the Planets out of scope individually, the reference count goes down.
+# In the end the sun only has one reference again, to itself. See more at:
+# https://doc.rust-lang.org/book/ch15-04-rc.html
+#
+# * Unfortunately Pluto is no longer considered a planet :(
+# """
+#
+# [[exercises]]
+# name = "arc1"
+# path = "exercises/smart_pointers/arc1.rs"
+# mode = "compile"
+# hint = """
+# Make `shared_numbers` be an `Arc` from the numbers vector. Then, in order
+# to avoid creating a copy of `numbers`, you'll need to create `child_numbers`
+# inside the loop but still in the main thread.
+#
+# `child_numbers` should be a clone of the Arc of the numbers instead of a
+# thread-local copy of the numbers.
+#
+# This is a simple exercise if you understand the underlying concepts, but if this
+# is too much of a struggle, consider reading through all of Chapter 16 in the book:
+# https://doc.rust-lang.org/stable/book/ch16-00-concurrency.html
+# """
+#
+# [[exercises]]
+# name = "cow1"
+# path = "exercises/smart_pointers/cow1.rs"
+# mode = "test"
+# hint = """
+# If Cow already owns the data it doesn't need to clone it when to_mut() is called.
+#
+# Check out https://doc.rust-lang.org/std/borrow/enum.Cow.html for documentation
+# on the `Cow` type.
+# """
+#
+# # MACROS
+#
+# [[exercises]]
+# name = "macros1"
+# path = "exercises/macros/macros1.rs"
+# mode = "compile"
+# hint = """
+# When you call a macro, you need to add something special compared to a
+# regular function call. If you're stuck, take a look at what's inside
+# `my_macro`."""
+#
+# [[exercises]]
+# name = "macros2"
+# path = "exercises/macros/macros2.rs"
+# mode = "compile"
+# hint = """
+# Macros don't quite play by the same rules as the rest of Rust, in terms of
+# what's available where.
+#
+# Unlike other things in Rust, the order of "where you define a macro" versus
+# "where you use it" actually matters."""
+#
+# [[exercises]]
+# name = "macros3"
+# path = "exercises/macros/macros3.rs"
+# mode = "compile"
+# hint = """
+# In order to use a macro outside of its module, you need to do something
+# special to the module to lift the macro out into its parent.
+#
+# The same trick also works on "extern crate" statements for crates that have
+# exported macros, if you've seen any of those around."""
+#
+# [[exercises]]
+# name = "macros4"
+# path = "exercises/macros/macros4.rs"
+# mode = "compile"
+# hint = """
+# You only need to add a single character to make this compile.
+# The way macros are written, it wants to see something between each
+# "macro arm", so it can separate them.
+#
+# That's all the macro exercises we have in here, but it's barely even
+# scratching the surface of what you can do with Rust's macros. For a more
+# thorough introduction, you can have a read through the little book of Rust
+# macros: https://veykril.github.io/tlborm/"""
+#
 #  CLIPPY
 
 [[exercises]]
