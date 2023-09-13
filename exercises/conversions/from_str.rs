@@ -1,16 +1,15 @@
 // from_str.rs
-//
-// This is similar to from_into.rs, but this time we'll implement `FromStr` and
-// return errors instead of falling back to a default value. Additionally, upon
-// implementing FromStr, you can use the `parse` method on strings to generate
-// an object of the implementor type. You can read more about it at
-// https://doc.rust-lang.org/std/str/trait.FromStr.html
-//
-// Execute `rustlings hint from_str` or use the `hint` watch subcommand for a
-// hint.
+// This is similar to from_into.rs, but this time we'll implement `FromStr`
+// and return errors instead of falling back to a default value.
+// Additionally, upon implementing FromStr, you can use the `parse` method
+// on strings to generate an object of the implementor type.
+// You can read more about it at https://doc.rust-lang.org/std/str/trait.FromStr.html
+// Execute `rustlings hint from_str` or use the `hint` watch subcommand for a hint.
 
+use std::error::Error;
 use std::num::ParseIntError;
 use std::str::FromStr;
+use std::usize;
 
 #[derive(Debug, PartialEq)]
 struct Person {
@@ -31,27 +30,47 @@ enum ParsePersonError {
     ParseInt(ParseIntError),
 }
 
-// I AM NOT DONE
-
 // Steps:
 // 1. If the length of the provided string is 0, an error should be returned
 // 2. Split the given string on the commas present in it
-// 3. Only 2 elements should be returned from the split, otherwise return an
-//    error
+// 3. Only 2 elements should be returned from the split, otherwise return an error
 // 4. Extract the first element from the split operation and use it as the name
-// 5. Extract the other element from the split operation and parse it into a
-//    `usize` as the age with something like `"4".parse::<usize>()`
-// 6. If while extracting the name and the age something goes wrong, an error
-//    should be returned
+// 5. Extract the other element from the split operation and parse it into a `usize` as the age
+//    with something like `"4".parse::<usize>()`
+// 6. If while extracting the name and the age something goes wrong, an error should be returned
 // If everything goes well, then return a Result of a Person object
 //
-// As an aside: `Box<dyn Error>` implements `From<&'_ str>`. This means that if
-// you want to return a string error message, you can do so via just using
-// return `Err("my error message".into())`.
+// As an aside: `Box<dyn Error>` implements `From<&'_ str>`. This means that if you want to return a
+// string error message, you can do so via just using return `Err("my error message".into())`.
 
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        // let (n, a) = match s.splitn(2, ",") {
+        if s.is_empty() {
+            return Err(ParsePersonError::Empty);
+        };
+
+        let parts: Vec<&str> = s.split(",").collect();
+        if parts.len() != 2 {
+            return Err(ParsePersonError::BadLen);
+        }
+
+        let parsed_name: String = parts[0].to_string();
+        if parsed_name.is_empty() {
+            return Err(ParsePersonError::NoName);
+        }
+
+        let parsed_age: usize = match parts[1].trim().parse() {
+            Ok(val) => val,
+            Err(ParseIntError) => return Err(ParsePersonError::ParseInt(ParseIntError)),
+            // Err(_) => return Err(ParsePersonError),
+        };
+
+        Ok(Person {
+            name: parsed_name,
+            age: parsed_age,
+        })
     }
 }
 
